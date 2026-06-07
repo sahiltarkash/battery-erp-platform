@@ -3,6 +3,7 @@ import express from 'express';
 import 'express-async-errors';
 import { authRouter } from './routes/auth.routes';
 import { userRouter } from './routes/user.routes';
+import { inventoryRouter } from './routes/inventory.routes';
 import { errorHandler } from './middleware/error.middleware';
 import { swaggerRouter } from './swagger';
 
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
+app.use('/api/inventory', inventoryRouter);
 app.use('/api/docs', swaggerRouter);
 
 app.get('/api', (_req, res) =>

@@ -53,6 +53,54 @@ model Inventory {
   @@index([deletedAt])
 }
 
+model Battery {
+  id                String            @id @default(uuid())
+  sku               String            @unique
+  brand             String
+  category          String
+  voltage           String
+  capacityAh        Int
+  warrantyMonths    Int
+  purchasePrice     Decimal           @db.Decimal(12, 2)
+  sellingPrice      Decimal           @db.Decimal(12, 2)
+  stockQuantity     Int               @default(0)
+  lowStockThreshold Int               @default(5)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  deletedAt         DateTime?
+  adjustments       StockAdjustment[]
+  transfersFrom     StockTransfer[]   @relation("transferSource")
+  transfersTo       StockTransfer[]   @relation("transferDestination")
+
+  @@index([sku])
+  @@index([deletedAt])
+}
+
+model StockAdjustment {
+  id         String   @id @default(uuid())
+  batteryId  String
+  adjustment Int
+  reason     String?
+  createdAt  DateTime @default(now())
+  battery    Battery  @relation(fields: [batteryId], references: [id], onDelete: Cascade)
+
+  @@index([batteryId])
+}
+
+model StockTransfer {
+  id                   String   @id @default(uuid())
+  sourceBatteryId      String
+  destinationBatteryId String
+  quantity             Int
+  reason               String?
+  createdAt            DateTime @default(now())
+  sourceBattery        Battery  @relation("transferSource", fields: [sourceBatteryId], references: [id], onDelete: Cascade)
+  destinationBattery   Battery  @relation("transferDestination", fields: [destinationBatteryId], references: [id], onDelete: Cascade)
+
+  @@index([sourceBatteryId])
+  @@index([destinationBatteryId])
+}
+
 model Category {
   id          String      @id @default(uuid())
   name        String
