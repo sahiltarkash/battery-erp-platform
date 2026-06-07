@@ -1,0 +1,22 @@
+{
+  "name": "battery-erp-platform",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "turbo run dev --filter=web",
+    "dev:api": "turbo run dev --filter=api",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "test": "turbo run test",
+    "start": "turbo run start"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.0"
+  }
+}
